@@ -142,9 +142,16 @@ int _tmain(int argc, char* argv[])
 			uint64 counter;
 			while (kmer_data_base.ReadNextKmer(kmer_object, counter))
 			{
+				/*
 				kmer_object.to_string(str);
 				str[_kmer_length] = '\t';
 				counter_len = CNumericConversions::Int2PChar(counter, (uchar*)str + _kmer_length + 1);
+				str[_kmer_length + 1 + counter_len] = '\n';
+				fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
+				*/
+				counter_len = CNumericConversions::Int2PChar(counter, (uchar*)str);
+				str[counter_len] = '\t';
+				kmer_object.to_string(str + counter_len + 1);
 				str[_kmer_length + 1 + counter_len] = '\n';
 				fwrite(str, 1, _kmer_length + counter_len + 2, out_file);
 			}
