@@ -44,6 +44,14 @@ KMC_DUMP_OBJS = \
 $(KMC_DUMP_DIR)/nc_utils.o \
 $(KMC_DUMP_DIR)/kmc_dump.o 
 
+KMC_DUMP_INVERTED_OBJS = \
+$(KMC_DUMP_DIR)/nc_utils.o \
+$(KMC_DUMP_DIR)/kmc_dump_inverted.o 
+
+KMC_DUMP_INDEXED_OBJS = \
+$(KMC_DUMP_DIR)/nc_utils.o \
+$(KMC_DUMP_DIR)/kmc_dump_indexed.o 
+
 KMC_API_OBJS = \
 $(KMC_API_DIR)/mmer.o \
 $(KMC_API_DIR)/kmc_file.o \
@@ -75,7 +83,7 @@ else
 	$(KMC_TOOLS_DIR)/libs/libaelf64.a 
 endif 	
 
-$(KMC_OBJS) $(KMC_DUMP_OBJS) $(KMC_API_OBJS): %.o: %.cpp
+$(KMC_OBJS) $(KMC_DUMP_OBJS) $(KMC_DUMP_INVERTED_OBJS) $(KMC_DUMP_INDEXED_OBJS) $(KMC_API_OBJS): %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(KMC_TOOLS_OBJS): %.o: %.cpp
@@ -95,7 +103,16 @@ $(KMC_MAIN_DIR)/instrset_detect.o: $(KMC_MAIN_DIR)/libs/vectorclass/instrset_det
 kmc: $(KMC_OBJS) $(RADULS_OBJS) $(KMC_MAIN_DIR)/instrset_detect.o 
 	-mkdir -p $(KMC_BIN_DIR)
 	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^ $(KMC_LIBS)
+
 kmc_dump: $(KMC_DUMP_OBJS) $(KMC_API_OBJS)
+	-mkdir -p $(KMC_BIN_DIR)
+	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^
+
+kmc_dump_inverted: $(KMC_DUMP_INVERTED_OBJS) $(KMC_API_OBJS)
+	-mkdir -p $(KMC_BIN_DIR)
+	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^
+
+kmc_dump_indexed: $(KMC_DUMP_INDEXED_OBJS) $(KMC_API_OBJS)
 	-mkdir -p $(KMC_BIN_DIR)
 	$(CC) $(CLINK) -o $(KMC_BIN_DIR)/$@ $^
 	
